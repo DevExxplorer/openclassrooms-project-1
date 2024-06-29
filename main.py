@@ -1,8 +1,12 @@
 import requests as req
 import product
 import csv
-
+import os
 from bs4 import BeautifulSoup
+
+"""
+Permet de parser le code HTML récupérer avec request
+"""
 
 
 def parse_data(url):
@@ -11,18 +15,34 @@ def parse_data(url):
     return soup
 
 
-def create_csv(data_products):
-    with open('products.csv', 'w', newline='') as csvfile:
-        fieldnames = data_products[0].keys()
+"""
+Création d'un fichier csv
+"""
+
+
+def create_csv(books_list):
+    with open("products.csv", "w", newline="") as csvfile:
+        fieldnames = books_list[0][0].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for line_product in data_products:
-            writer.writerow(line_product)
+
+        for line_product in books_list:
+            writer.writerows(line_product)
 
 
-def get_data_article_by_href(url, href):
-    data_parse = parse_data(url + href)
+"""
+Récupere les données HTML d'un produit en fonction de son url
+"""
+
+
+def get_data_article_by_href(href):
+    data_parse = parse_data('https://books.toscrape.com/catalogue/' + href)
     return product.get_info_product(data_parse)
+
+
+"""
+
+"""
 
 
 def get_data_page(url):
@@ -30,10 +50,16 @@ def get_data_page(url):
     data = parse_data(url)
 
     for i, article in enumerate(data.find_all('article')):
-        list_products.append(get_data_article_by_href(url, article.a['href']))
+        list_products.append(get_data_article_by_href(article.a['href']))
+    return list_products
 
-        create_csv(list_products)
 
+page = 1
+books_list = []
 
-get_data_page('https://books.toscrape.com/', data={'key': 'value'})
+while page <= 2:
+    books_list.append(get_data_page('https://books.toscrape.com/catalogue/page-' + str(page) + '.html'))
+    page += 1
+
+create_csv(books_list)
 
