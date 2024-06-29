@@ -54,12 +54,27 @@ def get_data_page(url):
     return list_products
 
 
+def check_next_page(url):
+    next_page = False
+    data = parse_data(url)
+    if data.find(class_="next"):
+        next_page = True
+
+    return next_page
+
+
+next_page = True
 page = 1
 books_list = []
 
-while page <= 2:
-    books_list.append(get_data_page('https://books.toscrape.com/catalogue/page-' + str(page) + '.html'))
-    page += 1
+while next_page:
+    url = 'https://books.toscrape.com/catalogue/page-' + str(page) + '.html'
+    books_list.append(get_data_page(url))
 
-create_csv(books_list)
+    if check_next_page(url):
+        page += 1
+    else:
+        next_page = False
+
+# create_csv(books_list)
 
