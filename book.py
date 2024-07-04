@@ -1,13 +1,3 @@
-import requests as req
-import csv
-from bs4 import BeautifulSoup
-
-def parse_html(url):
-    r = req.get(url)
-    soup = BeautifulSoup(r.content, 'html.parser')
-    return soup
-
-
 def get_number_star(data):
     match data['class'][1]:
         case "One":
@@ -26,7 +16,7 @@ def get_number_star(data):
     return result
 
 
-def get_info_book(data):
+def get_data_book(data):
     book = {
         "title": data.h1.string,
         "price": data.find(class_="price_color").string,
@@ -42,12 +32,3 @@ def get_info_book(data):
     }
 
     return book
-
-
-def create_csv(data_book):
-    with open("book.csv", "w", newline="") as csvfile:
-        fieldnames = data_book.keys()
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerow(data_book)
-
