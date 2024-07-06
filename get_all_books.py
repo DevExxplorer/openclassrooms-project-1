@@ -1,6 +1,8 @@
 
 import get_book
 import get_books_category
+import shutil
+import os
 
 
 def get_list_categories():
@@ -18,6 +20,13 @@ def get_list_categories():
 def save_all_books():
     categories = get_list_categories()
 
+    # Delete folder for delete old images and category folder and create new folder
+    if os.path.isdir('images'):
+        shutil.rmtree('images')
+
+    os.mkdir('images/')
+
     for category in categories:
         if category != 'books_1':
-            get_books_category.save_books(category)
+            os.mkdir('images/' + category)
+            get_books_category.save_books(category, True)

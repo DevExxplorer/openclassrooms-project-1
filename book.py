@@ -16,9 +16,17 @@ def get_number_star(data):
     return result
 
 
+def get_url_img(data):
+    carousel_div = data.find(class_="carousel-inner")
+    img_html = carousel_div.find('img')
+    src_img = img_html.get('src').split('../..')
+    return 'https://books.toscrape.com' + src_img[1]
+
+
 def get_data_book(data):
     book = {
         "title": data.h1.string,
+        "img":  get_url_img(data),
         "price": data.find(class_="price_color").string,
         "star_rating": get_number_star(data.find(class_="star-rating")),
         # "description": data.find(id="product_description").find_next_sibling().string,
@@ -30,5 +38,4 @@ def get_data_book(data):
         "availability": data.find_all('td')[5].string,
         "number_reviews": data.find_all('td')[6].string,
     }
-
     return book

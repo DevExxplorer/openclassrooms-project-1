@@ -1,5 +1,20 @@
 import csv
 import get_book
+import re
+import requests
+
+
+def get_slug_with_title(title):
+    title = title.lower().strip()
+    title = re.sub(r'[^\w\s-]', '', title)
+    title = re.sub(r'[-\s]+', '-', title)
+    return title
+
+
+def download_img(img, title, category):
+    f = open('images/' + category + '/' + get_slug_with_title(title) + '.jpg', 'wb')
+    f.write(requests.get(img).content)
+    f.close()
 
 
 def make_csv(data, category_name):
@@ -20,7 +35,7 @@ def check_next_page(url):
     return next_page
 
 
-def save_books(category):
+def save_books(category, all_category=False):
     data = []
     next_p = True
     page = 1
@@ -34,7 +49,11 @@ def save_books(category):
             link = article.find_all('a')[0]
             href = link.get('href')
             path_name = href.split('../')
-            data.append(get_book.get_book('https://books.toscrape.com/catalogue/' + path_name[-1]))
+            books = get_book.get_book('https://books.toscrape.com/catalogue/' + path_name[-1])
+            data.append(books)
+
+            if all_category:
+                download_img(books['img'], books['title'], category)
 
         if check_next_page(url):
             page += 1
