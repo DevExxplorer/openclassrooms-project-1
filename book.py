@@ -1,19 +1,28 @@
 def get_number_star(data):
-    match data['class'][1]:
-        case "One":
-            result = 1
-        case "Two":
-            result = 2
-        case "Three":
-            result = 3
-        case "Four":
-            result = 4
-        case "Five":
-            result = 5
-        case _:
-            result = "Error"
+    matching_data = {
+        "One": 1,
+        "Two": 2,
+        "Three": 3,
+        "Four": 4,
+        "Five": 5
+    }
 
-    return result
+    return matching_data.get(data['class'][1], "Error")
+    # match data['class'][1]:
+    #     case "One":
+    #         result = 1
+    #     case "Two":
+    #         result = 2
+    #     case "Three":
+    #         result = 3
+    #     case "Four":
+    #         result = 4
+    #     case "Five":
+    #         result = 5
+    #     case _:
+    #         result = "Error"
+
+    # return result
 
 
 def get_url_img(data):

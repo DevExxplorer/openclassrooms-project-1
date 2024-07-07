@@ -19,8 +19,8 @@ def parse_html(url):
     return soup
 
 
-def get_book(url=''):
-    if url == '':
+def get_book(url=None):
+    if not url:
         url = 'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html'
 
     html_book = parse_html(url)

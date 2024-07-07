@@ -5,10 +5,10 @@ import get_all_books
 
 def main():
     step = input(
-        'Quelles données souhaitez-vous extraire : '
-        'A) Un seul produit'
-        'B) Tous les produits d\'une catégorie '
-        'C) Tous les produits de toutes les catégories. '
+        'Quelles données souhaitez-vous extraire :\n'
+        'A) Un seul produit\n'
+        'B) Tous les produits d\'une catégorie\n'
+        'C) Tous les produits de toutes les catégories.\n'
         '[A/B/C]? : ')
 
     if step == 'A':
@@ -18,7 +18,7 @@ def main():
     elif step == 'C':
         get_all_books.save_all_books()
     else:
-        print('Erreur : veuillez relancer le programme')
+        print('Erreur : Veuillez relancer le programme')
 
 
 if __name__ == '__main__':
