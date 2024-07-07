@@ -1,3 +1,5 @@
+from re import search
+
 def get_number_star(data):
     matching_data = {
         "One": 1,
@@ -33,17 +35,18 @@ def get_url_img(data):
 
 
 def get_data_book(data):
+    price_regex = r"\d+\.\d{2}"
     book = {
         "title": data.h1.string,
         "img":  get_url_img(data),
-        "price": data.find(class_="price_color").string,
+        "price": float(search(price_regex, data.find(class_="price_color").string).group()),
         "star_rating": get_number_star(data.find(class_="star-rating")),
         # "description": data.find(id="product_description").find_next_sibling().string,
         "upc": data.find_all('td')[0].string,
         "product_type": data.find_all('td')[1].string,
-        "price_excl_tax": data.find_all('td')[2].string,
-        "price_incl_tax": data.find_all('td')[3].string,
-        "tax": data.find_all('td')[4].string,
+        "price_excl_tax": float(search(price_regex, data.find_all('td')[2].string).group()),
+        "price_incl_tax": float(search(price_regex, data.find_all('td')[3].string).group()),
+        "tax": float(search(price_regex, data.find_all('td')[4].string).group()),
         "availability": data.find_all('td')[5].string,
         "number_reviews": data.find_all('td')[6].string,
     }
