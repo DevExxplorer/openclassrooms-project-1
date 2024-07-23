@@ -1,6 +1,6 @@
-import get_book
-import get_books_category
-import get_all_books
+from get_book import save_book
+from get_books_category import save_books_category
+from get_all_books import save_all_books
 
 
 def main():
@@ -12,13 +12,13 @@ def main():
         '[A/B/C]? : ')
 
     if step == 'A':
-        get_book.save_book()
+        save_book()
     elif step == 'B':
-        get_books_category.save_books('mystery_3')
+        save_books_category('mystery_3')
     elif step == 'C':
-        get_all_books.save_all_books()
+        save_all_books()
     else:
-        print('Erreur : Veuillez relancer le programme')
+        print('Erreur: veuillez contacter un administrateur')
 
 
 if __name__ == '__main__':

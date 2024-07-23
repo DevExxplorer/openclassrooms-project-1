@@ -1,13 +1,13 @@
 
-import get_book
-import get_books_category
-import shutil
-import os
+from get_book import parse_html
+from get_books_category import save_books_category
+from shutil import rmtree
+from os import path, mkdir
 
 
 def get_list_categories():
     categories = []
-    categories_html = get_book.parse_html('https://books.toscrape.com/index.html')
+    categories_html = parse_html('https://books.toscrape.com/index.html')
     nav_list = categories_html.find(class_='nav-list')
     links_list = nav_list.find_all('a')
 
@@ -21,12 +21,13 @@ def save_all_books():
     categories = get_list_categories()
 
     # Delete folder for delete old images and category folder and create new folder
-    if os.path.isdir('images'):
-        shutil.rmtree('images')
+    if path.isdir('images'):
+        rmtree('images')
 
-    os.mkdir('images/')
+    mkdir('images/')
 
     for category in categories:
         if category != 'books_1':
-            os.mkdir('images/' + category)
-            get_books_category.save_books(category, True)
+            name_category = category.split('_')
+            mkdir('images/' + name_category[0])
+            save_books_category(category, True)

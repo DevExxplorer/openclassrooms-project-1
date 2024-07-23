@@ -12,14 +12,16 @@ def get_slug_with_title(title):
 
 
 def download_img(img, title, category):
-    f = open('images/' + category + '/' + get_slug_with_title(title) + '.jpg', 'wb')
+    name_category = category.split('_')
+    f = open('images/' + name_category[0] + '/' + get_slug_with_title(title) + '.jpg', 'wb')
     f.write(get(img).content)
     f.close()
 
 
-def make_csv(data, category_name):
+def make_csv(data, category):
+    name_category = category.split('_')
     data_key = data[0].keys()
-    with open('csv/' + category_name + '.csv', "w", newline="") as csvfile:
+    with open('csv/' + name_category[0] + '.csv', "w", newline="") as csvfile:
         writer = DictWriter(csvfile, fieldnames=data_key)
         writer.writeheader()
         writer.writerows(data)
@@ -35,7 +37,7 @@ def check_next_page(url):
     return next_page
 
 
-def save_books(category, all_category=False):
+def save_books_category(category, all_category=False):
     data = []
     next_p = True
     page = 1

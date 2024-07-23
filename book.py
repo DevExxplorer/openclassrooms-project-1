@@ -1,5 +1,6 @@
 from re import search
 
+
 def get_number_star(data):
     matching_data = {
         "One": 1,
@@ -10,21 +11,6 @@ def get_number_star(data):
     }
 
     return matching_data.get(data['class'][1], "Error")
-    # match data['class'][1]:
-    #     case "One":
-    #         result = 1
-    #     case "Two":
-    #         result = 2
-    #     case "Three":
-    #         result = 3
-    #     case "Four":
-    #         result = 4
-    #     case "Five":
-    #         result = 5
-    #     case _:
-    #         result = "Error"
-
-    # return result
 
 
 def get_url_img(data):
@@ -41,7 +27,7 @@ def get_data_book(data):
         "img":  get_url_img(data),
         "price": float(search(price_regex, data.find(class_="price_color").string).group()),
         "star_rating": get_number_star(data.find(class_="star-rating")),
-        # "description": data.find(id="product_description").find_next_sibling().string,
+        "description": data.find(id="product_description").find_next_sibling().string,
         "upc": data.find_all('td')[0].string,
         "product_type": data.find_all('td')[1].string,
         "price_excl_tax": float(search(price_regex, data.find_all('td')[2].string).group()),

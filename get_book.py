@@ -1,6 +1,6 @@
-import csv
-import book
-import requests as req
+from csv import DictWriter
+from book import get_data_book
+from requests import get
 from bs4 import BeautifulSoup
 
 
@@ -8,13 +8,13 @@ def make_csv(data):
     data_key = data.keys()
 
     with open('csv/book_a-light-in-the-attic_1000.csv', "w", newline="") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=data_key)
+        writer = DictWriter(csvfile, fieldnames=data_key)
         writer.writeheader()
         writer.writerow(data)
 
 
 def parse_html(url):
-    r = req.get(url)
+    r = get(url)
     soup = BeautifulSoup(r.content, 'html.parser')
     return soup
 
@@ -24,7 +24,7 @@ def get_book(url=None):
         url = 'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html'
 
     html_book = parse_html(url)
-    data = book.get_data_book(html_book)
+    data = get_data_book(html_book)
 
     return data
 
