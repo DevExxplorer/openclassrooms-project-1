@@ -2,12 +2,17 @@ from csv import DictWriter
 from book import get_data_book
 from requests import get
 from bs4 import BeautifulSoup
+import os
 
 
 def make_csv(data):
     data_key = data.keys()
+    folder = "one_book"
 
-    with open('csv/book_a-light-in-the-attic_1000.csv', "w", newline="") as csvfile:
+    if not os.path.exists('csv/' + folder):
+        os.makedirs('csv/' + folder)
+
+    with open('csv/' + folder + '/a-light-in-the-attic.csv', "w", newline="") as csvfile:
         writer = DictWriter(csvfile, fieldnames=data_key)
         writer.writeheader()
         writer.writerow(data)
@@ -24,7 +29,7 @@ def get_book(url=None):
         url = 'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html'
 
     html_book = parse_html(url)
-    data = get_data_book(html_book)
+    data = get_data_book(html_book, url)
 
     return data
 

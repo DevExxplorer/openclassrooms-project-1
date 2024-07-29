@@ -20,20 +20,30 @@ def get_url_img(data):
     return 'https://books.toscrape.com' + src_img[1]
 
 
-def get_data_book(data):
+def category_product(data):
+    breadcrumb_ul = data.find('ul', class_='breadcrumb')
+    breadcrumb_li = breadcrumb_ul.find_all('li')
+    name_category = breadcrumb_li[-2].find('a').string
+    print(name_category)
+
+
+def get_data_book(data, url):
     price_regex = r"\d+\.\d{2}"
+    description = "Pas de description sur ce produit"
+
+    if data.find(id="product_description"):
+        description = data.find(id="product_description").find_next_sibling().string
+
     book = {
+        "product_page_url": url,
+        "universal_ product_code": data.find_all('td')[0].string,
         "title": data.h1.string,
-        "img":  get_url_img(data),
-        "price": float(search(price_regex, data.find(class_="price_color").string).group()),
-        "star_rating": get_number_star(data.find(class_="star-rating")),
-        "description": data.find(id="product_description").find_next_sibling().string,
-        "upc": data.find_all('td')[0].string,
-        "product_type": data.find_all('td')[1].string,
-        "price_excl_tax": float(search(price_regex, data.find_all('td')[2].string).group()),
-        "price_incl_tax": float(search(price_regex, data.find_all('td')[3].string).group()),
-        "tax": float(search(price_regex, data.find_all('td')[4].string).group()),
-        "availability": data.find_all('td')[5].string,
-        "number_reviews": data.find_all('td')[6].string,
+        "price_including_tax": float(search(price_regex, data.find_all('td')[3].string).group()),
+        "price_excluding_tax": float(search(price_regex, data.find_all('td')[2].string).group()),
+        "number_available": data.find_all('td')[5].string,
+        "product_description": description,
+        "category": category_product(data),
+        "review_rating": get_number_star(data.find(class_="star-rating")),
+        "image_url": get_url_img(data),
     }
     return book

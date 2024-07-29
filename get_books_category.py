@@ -2,6 +2,7 @@ from csv import DictWriter
 from get_book import parse_html, get_book
 from re import sub
 from requests import get
+import os
 
 
 def get_slug_with_title(title):
@@ -18,10 +19,19 @@ def download_img(img, title, category):
     f.close()
 
 
-def make_csv(data, category):
+def make_csv(data, category, all_category):
     name_category = category.split('_')
     data_key = data[0].keys()
-    with open('csv/' + name_category[0] + '.csv', "w", newline="") as csvfile:
+
+    if all_category:
+        folder = "all_books"
+    else:
+        folder = "books_category"
+
+    if not os.path.exists('csv/' + folder):
+        os.makedirs('csv/' + folder)
+
+    with open('csv/' + folder + '/' + name_category[0] + '.csv', "w", newline="") as csvfile:
         writer = DictWriter(csvfile, fieldnames=data_key)
         writer.writeheader()
         writer.writerows(data)
@@ -55,13 +65,13 @@ def save_books_category(category, all_category=False):
             data.append(books)
 
             if all_category:
-                download_img(books['img'], books['title'], category)
+                download_img(books['image_url'], books['title'], category)
 
         if check_next_page(url):
             page += 1
         else:
             next_p = False
 
-    make_csv(data, category)
+    make_csv(data, category, all_category)
 
 
