@@ -24,6 +24,7 @@ def category_product(data):
     breadcrumb_ul = data.find('ul', class_='breadcrumb')
     breadcrumb_li = breadcrumb_ul.find_all('li')
     name_category = breadcrumb_li[-2].find('a').string
+    return name_category
 
 
 def get_data_book(data, url):
